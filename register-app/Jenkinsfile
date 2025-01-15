@@ -22,7 +22,7 @@ pipeline {
 
         stage("Checkout from SCM"){
                 steps {
-                    git branch: 'main', credentialsId: 'github', url: 'https://github.com/ramesh1918s/My_Projects.git'
+                    git branch: 'ramesh', credentialsId: 'github', url: 'https://github.com/ramesh1918s/My_Projects.git'
                 }
         }
 
