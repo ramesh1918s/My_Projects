@@ -24,14 +24,18 @@ pipeline {
         stage("Build Application") {
             steps {
                 echo "Building the application..."
-                sh "mvn clean package"
+                dir('register-app') { // Navigate to the correct directory
+                    sh "mvn clean package"
+                }
             }
         }
 
         stage("Test Application") {
             steps {
                 echo "Running tests on the application..."
-                sh "mvn test"
+                dir('register-app') { // Navigate to the correct directory
+                    sh "mvn test"
+                }
             }
         }
     }
