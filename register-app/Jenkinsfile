@@ -1,35 +1,51 @@
 pipeline {
     agent { label 'Jenkins_Agent' }
+
     tools {
         jdk 'Java17'
         maven 'Maven3'
     }
 
-stages{
-        stage("Cleanup Workspace"){
-                steps {
-                cleanWs()
-                }
-        }
-
-        stage("Checkout from SCM"){
-                steps {
-                    git branch: 'ramesh', credentialsId: 'github', url: 'https://github.com/ramesh1918s/My_Projects.git'
-                }
-        }
-
-        stage("Build Application"){
+    stages {
+        stage("Cleanup Workspace") {
             steps {
+                echo "Cleaning up workspace..."
+                cleanWs()
+            }
+        }
+
+        stage("Checkout from SCM") {
+            steps {
+                echo "Checking out code from SCM..."
+                git branch: 'ramesh', credentialsId: 'github', url: 'https://github.com/ramesh1918s/My_Projects.git'
+            }
+        }
+
+        stage("Build Application") {
+            steps {
+                echo "Building the application..."
                 sh "mvn clean package"
             }
+        }
 
-       }
+        stage("Test Application") {
+            steps {
+                echo "Running tests on the application..."
+                sh "mvn test"
+            }
+        }
+    }
 
-       stage("Test Application"){
-           steps {
-                 sh "mvn test"
-           }
-      
-         }
-     }
- }
+    post {
+        success {
+            echo "Pipeline completed successfully."
+        }
+        failure {
+            echo "Pipeline failed. Check the logs for more details."
+        }
+        always {
+            echo "Cleaning up workspace after build..."
+            cleanWs()
+        }
+    }
+}
